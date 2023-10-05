@@ -1,6 +1,5 @@
-# matplotlib_guide
- A Guide to Visualizing Data with Matplotlib
+# A Guide to Visualizing Data with Matplotlib
 
- The list of visualizations include:
+The list of visualizations include:
 
  - Barcharts
