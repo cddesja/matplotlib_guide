@@ -11,15 +11,15 @@ This guide assumes that you have Python 3 installed as well as the pandas, numpy
 
 The `python` packages necessary for this guide are:
 
-- pandas
-- numpy
-- matplotlib
-- palmerpenguins
+-   pandas
+-   numpy
+-   matplotlib
+-   palmerpenguins
 
 These can be installed via pip.
 
 ```{python}
-def ggplot_defaults():
+def ggplot2_defaults():
     [s.set_visible(False) for s in ax.spines.values()]
     # ax.spines['top'].set_visible(False)
     # ax.spines['bottom'].set_visible(False)
@@ -31,8 +31,8 @@ def ggplot_defaults():
     plt.gca().patch.set_facecolor('gainsboro') ## sets grid fill color
 ```
 
-
 We'll begin by loading these packages
+
 ```{python}
 import pandas as pd
 import numpy as np
@@ -59,12 +59,6 @@ fig, ax = plt.subplots()
 ax.bar(x = count_by_species.index, height = count_by_species.values, color = "dimgray");
 ax.set_ylabel("count")
 ax.set_xlabel("species")
-
-## grid options
-## this allow a ggplot2 default experience
-
-
-
 ggplot2_defaults()
 ```
 
@@ -84,26 +78,20 @@ ggplot2_defaults()
 
 ```{python}
 count_by_species_and_year = penguins.groupby(["species", "year"]).size()
+count_by_species_and_year = count_by_species_and_year.reset_index()
+count_by_species_and_year.rename(columns = {0:'value'}, inplace = True)
 
-csyr = pd.DataFrame({
-    "species": count_by_species_and_year.index.get_level_values(0),
-    "year": count_by_species_and_year.index.get_level_values(1),
-    "value": count_by_species_and_year.values
-})
-species_by_year = csyr.pivot(index = "species", columns = "year", values = "value")
-
-x = np.arange(len(species_by_year.index))  # the label locations
 width = 0.25  # the width of the bars
+x = np.arange(count_by_species_and_year["species"].nunique())
 multiplier = 0
-
 fig, ax = plt.subplots()
 
-for attribute, measurement in species_by_year.items():
+for yr in count_by_species_and_year["year"].unique():
+    ht = count_by_species_and_year[count_by_species_and_year["year"] == yr]["value"]
     offset = width * multiplier
-    rects = ax.bar(x + offset, measurement, width, label=attribute)
-    ax.bar_label(rects, padding=3)
+    rects = ax.bar(x + offset, ht, width, label = yr)
     multiplier += 1
-
+    
 ax.set_ylabel('count')
 ax.set_xlabel('species')
 ax.set_xticks(x + width, species_by_year.index)
@@ -113,9 +101,62 @@ ax.set_ylim(0, 60)
 ggplot2_defaults()
 ```
 
+### Stacked Barchart
+
+```{python}
+width = 0.5
+
+fig, ax = plt.subplots()
+bottom = np.zeros(3)
+
+for yr in count_by_species_and_year["year"].unique():
+    tmp = count_by_species_and_year[count_by_species_and_year["year"] == yr]
+    species = np.array(tmp["species"])
+    value = np.array(tmp["value"])
+    p = ax.bar(species, value, width, label=yr, bottom=bottom)
+    bottom += value
+
+ax.set_ylabel('count')
+ax.set_xlabel('species')
+ax.set_xticks(count_by_species_and_year["species"].unique())
+ax.legend(ncols=3)
+ax.set_ylim(0, 160)
+
+ggplot2_defaults()
+```
+
+### Mosaic Plot
 
 
+```{python}
+tot_by_grp = count_by_species_and_year.groupby(["species"])["value"].sum().reset_index()
+tot_by_grp.rename(columns = {"value":"tot"}, inplace = True)
+count_by_species_and_year = count_by_species_and_year.merge(tot_by_grp, on = "species", how = "left")
+count_by_species_and_year["prop"] = count_by_species_and_year["value"] / count_by_species_and_year["tot"]
 
+totals = count_by_species_and_year["tot"].unique()
+scaled_totals = totals / totals.min()
 
+width = scaled_totals / 2
+fig, ax = plt.subplots()
+bottom = np.zeros(3)
 
+species_loc = [0, (width[0]/2 + width[1]/2) + .005, (width[0]/2 + width[1] + width[2]/2) + .01]
 
+for yr in count_by_species_and_year["year"].unique():
+    tmp = count_by_species_and_year[count_by_species_and_year["year"] == yr]
+    prop = np.array(tmp["prop"])
+    p = ax.bar(species_loc, prop, width, label=yr, bottom=bottom)
+    bottom += np.array(tmp["prop"])
+    
+ax.set_ylabel('propotion')
+ax.set_xlabel('species')
+
+box = ax.get_position()
+ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+
+ax.set_xticks(ticks = species_loc, labels = count_by_species_and_year["species"].unique())
+ax.legend(ncol = 1, loc = "center left", bbox_to_anchor=(1, 0.5))
+
+ggplot2_defaults()
+```
