@@ -18,6 +18,19 @@ The `python` packages necessary for this guide are:
 
 These can be installed via pip.
 
+```{python}
+def ggplot_defaults():
+    [s.set_visible(False) for s in ax.spines.values()]
+    # ax.spines['top'].set_visible(False)
+    # ax.spines['bottom'].set_visible(False)
+    # ax.spines['left'].set_visible(False)
+    # ax.spines['right'].set_visible(False)
+
+    ax.set_axisbelow(True) ## draws the grid below the bars
+    ax.grid(visible = True, color = "white") ## turns on grid and sets lines to white
+    plt.gca().patch.set_facecolor('gainsboro') ## sets grid fill color
+```
+
 
 We'll begin by loading these packages
 ```{python}
@@ -50,15 +63,9 @@ ax.set_xlabel("species")
 ## grid options
 ## this allow a ggplot2 default experience
 
-[s.set_visible(False) for s in ax.spines.values()] 
-# ax.spines['top'].set_visible(False)
-# ax.spines['bottom'].set_visible(False)
-# ax.spines['left'].set_visible(False)
-# ax.spines['right'].set_visible(False)
 
-ax.set_axisbelow(True) ## draws the grid below the bars
-ax.grid(visible = True, color = "white") ## turns on the grid and sets the lines to white
-plt.gca().patch.set_facecolor('gainsboro') ## sets grid fill color
+
+ggplot2_defaults()
 ```
 
 ```{python}
@@ -70,15 +77,41 @@ ax.bar(x = count_by_species.index, height = count_by_species.values, color = "di
 ax.set_ylabel("count")
 ax.set_xlabel("species")
 
-## grid options
-[s.set_visible(False) for s in ax.spines.values()]
-ax.set_axisbelow(True) ## draws the grid below the bars
-ax.grid(visible = True, color = "white") ## turnns on grid and sets lines to white
-plt.gca().patch.set_facecolor('gainsboro') ## sets grid fill color
-
+ggplot2_defaults()
 ```
 
-### Histograms
+### Side-by-Side Barchart
+
+```{python}
+count_by_species_and_year = penguins.groupby(["species", "year"]).size()
+
+csyr = pd.DataFrame({
+    "species": count_by_species_and_year.index.get_level_values(0),
+    "year": count_by_species_and_year.index.get_level_values(1),
+    "value": count_by_species_and_year.values
+})
+species_by_year = csyr.pivot(index = "species", columns = "year", values = "value")
+
+x = np.arange(len(species_by_year.index))  # the label locations
+width = 0.25  # the width of the bars
+multiplier = 0
+
+fig, ax = plt.subplots()
+
+for attribute, measurement in species_by_year.items():
+    offset = width * multiplier
+    rects = ax.bar(x + offset, measurement, width, label=attribute)
+    ax.bar_label(rects, padding=3)
+    multiplier += 1
+
+ax.set_ylabel('count')
+ax.set_xlabel('species')
+ax.set_xticks(x + width, species_by_year.index)
+ax.legend(ncols=3)
+ax.set_ylim(0, 60)
+
+ggplot2_defaults()
+```
 
 
 
