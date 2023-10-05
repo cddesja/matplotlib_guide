@@ -1,0 +1,88 @@
+---
+title: "A Guide to Visualizing Data with Matplotlib"
+format: html
+---
+
+## Prerequisite
+
+This guide assumes that you have Python 3 installed as well as the pandas, numpy, and matplotlib packages.
+
+## Setup
+
+The `python` packages necessary for this guide are:
+
+- pandas
+- numpy
+- matplotlib
+- palmerpenguins
+
+These can be installed via pip.
+
+
+We'll begin by loading these packages
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from rdatasets import data
+from palmerpenguins import load_penguins
+```
+
+and then reading in the data
+
+```{python}
+penguins = load_penguins()
+penguins.head()
+```
+
+## Visualizations
+
+### Barchart
+
+```{python}
+count_by_species = penguins.groupby("species").size()
+
+fig, ax = plt.subplots()
+ax.bar(x = count_by_species.index, height = count_by_species.values, color = "dimgray");
+ax.set_ylabel("count")
+ax.set_xlabel("species")
+
+## grid options
+## this allow a ggplot2 default experience
+
+[s.set_visible(False) for s in ax.spines.values()] 
+# ax.spines['top'].set_visible(False)
+# ax.spines['bottom'].set_visible(False)
+# ax.spines['left'].set_visible(False)
+# ax.spines['right'].set_visible(False)
+
+ax.set_axisbelow(True) ## draws the grid below the bars
+ax.grid(visible = True, color = "white") ## turns on the grid and sets the lines to white
+plt.gca().patch.set_facecolor('gainsboro') ## sets grid fill color
+```
+
+```{python}
+## sort the bars
+count_by_species.sort_values(ascending = False, inplace = True)
+
+fig, ax = plt.subplots()
+ax.bar(x = count_by_species.index, height = count_by_species.values, color = "dimgray");
+ax.set_ylabel("count")
+ax.set_xlabel("species")
+
+## grid options
+[s.set_visible(False) for s in ax.spines.values()]
+ax.set_axisbelow(True) ## draws the grid below the bars
+ax.grid(visible = True, color = "white") ## turnns on grid and sets lines to white
+plt.gca().patch.set_facecolor('gainsboro') ## sets grid fill color
+
+```
+
+### Histograms
+
+
+
+
+
+
+
