@@ -163,7 +163,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="op">=</span> load_penguins()</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>penguins.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="23">
+<div class="cell-output cell-output-display" data-execution_count="39">
 
 <div>
 
@@ -245,8 +245,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="visualizations" class="level2">
 <h2 class="anchored" data-anchor-id="visualizations">Visualizations</h2>
-<section id="barchart" class="level3">
-<h3 class="anchored" data-anchor-id="barchart">Barchart</h3>
+<section id="categorical-variables" class="level3">
+<h3 class="anchored" data-anchor-id="categorical-variables">Categorical Variables</h3>
+<section id="barchart" class="level4">
+<h4 class="anchored" data-anchor-id="barchart">Barchart</h4>
 <div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>count_by_species <span class="op">=</span> penguins.groupby(<span class="st">"species"</span>).size()</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -274,8 +276,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </section>
-<section id="side-by-side-barchart" class="level3">
-<h3 class="anchored" data-anchor-id="side-by-side-barchart">Side-by-Side Barchart</h3>
+<section id="side-by-side-barchart" class="level4">
+<h4 class="anchored" data-anchor-id="side-by-side-barchart">Side-by-Side Barchart</h4>
 <div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>count_by_species_and_year <span class="op">=</span> penguins.groupby([<span class="st">"species"</span>, <span class="st">"year"</span>]).size()</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>count_by_species_and_year <span class="op">=</span> count_by_species_and_year.reset_index()</span>
@@ -304,8 +306,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </section>
-<section id="stacked-barchart" class="level3">
-<h3 class="anchored" data-anchor-id="stacked-barchart">Stacked Barchart</h3>
+<section id="stacked-barchart" class="level4">
+<h4 class="anchored" data-anchor-id="stacked-barchart">Stacked Barchart</h4>
 <div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> <span class="fl">0.5</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -331,8 +333,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </section>
-<section id="mosaic-plot" class="level3">
-<h3 class="anchored" data-anchor-id="mosaic-plot">Mosaic Plot</h3>
+<section id="mosaic-plot" class="level4">
+<h4 class="anchored" data-anchor-id="mosaic-plot">Mosaic Plot</h4>
 <div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>tot_by_grp <span class="op">=</span> count_by_species_and_year.groupby([<span class="st">"species"</span>])[<span class="st">"value"</span>].<span class="bu">sum</span>().reset_index()</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>tot_by_grp.rename(columns <span class="op">=</span> {<span class="st">"value"</span>:<span class="st">"tot"</span>}, inplace <span class="op">=</span> <span class="va">True</span>)</span>
@@ -342,32 +344,95 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>totals <span class="op">=</span> count_by_species_and_year[<span class="st">"tot"</span>].unique()</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>scaled_totals <span class="op">=</span> totals <span class="op">/</span> totals.<span class="bu">min</span>()</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> scaled_totals <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>width <span class="op">=</span> scaled_totals</span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>bottom <span class="op">=</span> np.zeros(<span class="dv">3</span>)</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>species_loc <span class="op">=</span> [<span class="dv">0</span>, (width[<span class="dv">0</span>]<span class="op">/</span><span class="dv">2</span> <span class="op">+</span> width[<span class="dv">1</span>]<span class="op">/</span><span class="dv">2</span>) <span class="op">+</span> <span class="fl">.005</span>, (width[<span class="dv">0</span>]<span class="op">/</span><span class="dv">2</span> <span class="op">+</span> width[<span class="dv">1</span>] <span class="op">+</span> width[<span class="dv">2</span>]<span class="op">/</span><span class="dv">2</span>) <span class="op">+</span> <span class="fl">.01</span>]</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> yr <span class="kw">in</span> count_by_species_and_year[<span class="st">"year"</span>].unique():</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    tmp <span class="op">=</span> count_by_species_and_year[count_by_species_and_year[<span class="st">"year"</span>] <span class="op">==</span> yr]</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    prop <span class="op">=</span> np.array(tmp[<span class="st">"prop"</span>])</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> ax.bar(species_loc, prop, width, label<span class="op">=</span>yr, bottom<span class="op">=</span>bottom)</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    bottom <span class="op">+=</span> np.array(tmp[<span class="st">"prop"</span>])</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'propotion'</span>)</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'species'</span>)</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>box <span class="op">=</span> ax.get_position()</span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>ax.set_position([box.x0, box.y0, box.width <span class="op">*</span> <span class="fl">0.8</span>, box.height])</span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>ax.set_xticks(ticks <span class="op">=</span> species_loc, labels <span class="op">=</span> count_by_species_and_year[<span class="st">"species"</span>].unique())</span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>ax.legend(ncol <span class="op">=</span> <span class="dv">1</span>, loc <span class="op">=</span> <span class="st">"center left"</span>, bbox_to_anchor<span class="op">=</span>(<span class="dv">1</span>, <span class="fl">0.5</span>))</span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>ggplot2_defaults()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>species_loc <span class="op">=</span> [<span class="dv">0</span>, (width[<span class="dv">0</span>]<span class="op">/</span><span class="dv">2</span> <span class="op">+</span> width[<span class="dv">1</span>]<span class="op">/</span><span class="dv">2</span>) <span class="op">+</span> <span class="fl">.005</span>, (width[<span class="dv">0</span>]<span class="op">/</span><span class="dv">2</span> <span class="op">+</span> width[<span class="dv">1</span>] <span class="op">+</span> <span class="fl">.005</span> <span class="op">+</span> width[<span class="dv">2</span>]<span class="op">/</span><span class="dv">2</span>) <span class="op">+</span> <span class="fl">.005</span>]</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> yr <span class="kw">in</span> count_by_species_and_year[<span class="st">"year"</span>].unique():</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    tmp <span class="op">=</span> count_by_species_and_year[count_by_species_and_year[<span class="st">"year"</span>] <span class="op">==</span> yr]</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    prop <span class="op">=</span> np.array(tmp[<span class="st">"prop"</span>])</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> ax.bar(species_loc, prop, width, label<span class="op">=</span>yr, bottom<span class="op">=</span>bottom, edgecolor <span class="op">=</span> <span class="st">"white"</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    bottom <span class="op">+=</span> np.array(tmp[<span class="st">"prop"</span>])</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'proportion'</span>)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'species'</span>)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>box <span class="op">=</span> ax.get_position()</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>ax.set_position([box.x0, box.y0, box.width <span class="op">*</span> <span class="fl">0.8</span>, box.height])</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>ax.set_xticks(ticks <span class="op">=</span> species_loc, labels <span class="op">=</span> count_by_species_and_year[<span class="st">"species"</span>].unique())</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>ax.legend(ncol <span class="op">=</span> <span class="dv">1</span>, loc <span class="op">=</span> <span class="st">"center left"</span>, bbox_to_anchor<span class="op">=</span>(<span class="dv">1</span>, <span class="fl">0.5</span>))</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>ggplot2_defaults()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="guide_to_matplotlib_files/figure-html/cell-9-output-1.png" width="573" height="429"></p>
 </div>
 </div>
+</section>
+<section id="piecharts" class="level4">
+<h4 class="anchored" data-anchor-id="piecharts">Piecharts</h4>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>ax.pie(x <span class="op">=</span> count_by_species.values, labels <span class="op">=</span> count_by_species.index, startangle <span class="op">=</span> <span class="dv">90</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="guide_to_matplotlib_files/figure-html/cell-10-output-1.png" width="405" height="389"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="numerical-variables" class="level3">
+<h3 class="anchored" data-anchor-id="numerical-variables">Numerical Variables</h3>
+<section id="histograms" class="level4">
+<h4 class="anchored" data-anchor-id="histograms">Histograms</h4>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>ax.hist(penguins[<span class="st">"bill_length_mm"</span>], edgecolor <span class="op">=</span> <span class="st">"white"</span>, color <span class="op">=</span> <span class="st">"#cc4778"</span>)<span class="op">;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'count'</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'bill length (mm)'</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>ggplot2_defaults()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="guide_to_matplotlib_files/figure-html/cell-11-output-1.png" width="585" height="429"></p>
+</div>
+</div>
+</section>
+<section id="boxplots" class="level4">
+<h4 class="anchored" data-anchor-id="boxplots">Boxplots</h4>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>ax.boxplot(penguins[<span class="st">"bill_length_mm"</span>].dropna(),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    patch_artist <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    medianprops <span class="op">=</span> {<span class="st">"color"</span>: <span class="st">"black"</span>},</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    boxprops <span class="op">=</span> {<span class="st">"facecolor"</span>: <span class="st">"white"</span>})</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>plt.xticks([])<span class="op">;</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>ggplot2_defaults()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="guide_to_matplotlib_files/figure-html/cell-12-output-1.png" width="566" height="389"></p>
+</div>
+</div>
+</section>
+<section id="boxplot-with-points" class="level4">
+<h4 class="anchored" data-anchor-id="boxplot-with-points">Boxplot with points</h4>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(penguins[<span class="st">"bill_length_mm"</span>].dropna())</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>ax.boxplot(penguins[<span class="st">"bill_length_mm"</span>].dropna(),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    patch_artist <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    medianprops <span class="op">=</span> {<span class="st">"color"</span>: <span class="st">"black"</span>},</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    boxprops <span class="op">=</span> {<span class="st">"fill"</span>: <span class="va">None</span>})</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>ax.scatter(y <span class="op">=</span> penguins[<span class="st">"bill_length_mm"</span>].dropna(), x <span class="op">=</span> [<span class="dv">1</span>] <span class="op">*</span> n <span class="op">+</span> np.random.normal(size <span class="op">=</span> n, scale <span class="op">=</span> <span class="dv">1</span><span class="op">/</span><span class="dv">100</span>), color <span class="op">=</span> <span class="st">"black"</span>, alpha <span class="op">=</span> <span class="dv">1</span><span class="op">/</span><span class="dv">4</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>plt.xticks([])<span class="op">;</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>ggplot2_defaults()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="guide_to_matplotlib_files/figure-html/cell-13-output-1.png" width="566" height="389"></p>
+</div>
+</div>
+</section>
 </section>
 </section>
 
