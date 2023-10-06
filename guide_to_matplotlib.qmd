@@ -1,6 +1,8 @@
 ---
 title: "A Guide to Visualizing Data with Matplotlib"
 format: html
+execute:
+    freeze: auto
 ---
 
 ## Prerequisite
@@ -50,7 +52,9 @@ penguins.head()
 
 ## Visualizations
 
-### Barchart
+### Categorical Variables
+
+#### Barchart
 
 ```{python}
 count_by_species = penguins.groupby("species").size()
@@ -74,7 +78,7 @@ ax.set_xlabel("species")
 ggplot2_defaults()
 ```
 
-### Side-by-Side Barchart
+#### Side-by-Side Barchart
 
 ```{python}
 count_by_species_and_year = penguins.groupby(["species", "year"]).size()
@@ -94,14 +98,14 @@ for yr in count_by_species_and_year["year"].unique():
     
 ax.set_ylabel('count')
 ax.set_xlabel('species')
-ax.set_xticks(x + width, species_by_year.index)
+ax.set_xticks(x + width, count_by_species_and_year["species"].unique())
 ax.legend(ncols=3)
 ax.set_ylim(0, 60)
 
 ggplot2_defaults()
 ```
 
-### Stacked Barchart
+#### Stacked Barchart
 
 ```{python}
 width = 0.5
@@ -125,8 +129,7 @@ ax.set_ylim(0, 160)
 ggplot2_defaults()
 ```
 
-### Mosaic Plot
-
+#### Mosaic Plot
 
 ```{python}
 tot_by_grp = count_by_species_and_year.groupby(["species"])["value"].sum().reset_index()
@@ -137,19 +140,18 @@ count_by_species_and_year["prop"] = count_by_species_and_year["value"] / count_b
 totals = count_by_species_and_year["tot"].unique()
 scaled_totals = totals / totals.min()
 
-width = scaled_totals / 2
+width = scaled_totals
 fig, ax = plt.subplots()
 bottom = np.zeros(3)
-
-species_loc = [0, (width[0]/2 + width[1]/2) + .005, (width[0]/2 + width[1] + width[2]/2) + .01]
+species_loc = [0, (width[0]/2 + width[1]/2) + .005, (width[0]/2 + width[1] + .005 + width[2]/2) + .005]
 
 for yr in count_by_species_and_year["year"].unique():
     tmp = count_by_species_and_year[count_by_species_and_year["year"] == yr]
     prop = np.array(tmp["prop"])
-    p = ax.bar(species_loc, prop, width, label=yr, bottom=bottom)
+    p = ax.bar(species_loc, prop, width, label=yr, bottom=bottom, edgecolor = "white")
     bottom += np.array(tmp["prop"])
     
-ax.set_ylabel('propotion')
+ax.set_ylabel('proportion')
 ax.set_xlabel('species')
 
 box = ax.get_position()
@@ -158,5 +160,56 @@ ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 ax.set_xticks(ticks = species_loc, labels = count_by_species_and_year["species"].unique())
 ax.legend(ncol = 1, loc = "center left", bbox_to_anchor=(1, 0.5))
 
+ggplot2_defaults()
+```
+
+#### Piecharts
+
+```{python}
+fig, ax = plt.subplots()
+ax.pie(x = count_by_species.values, labels = count_by_species.index, startangle = 90);
+```
+
+### Numerical Variables
+
+#### Histograms
+
+```{python}
+fig, ax = plt.subplots()
+ax.hist(penguins["bill_length_mm"], edgecolor = "white", color = "#cc4778");
+
+ax.set_ylabel('count')
+ax.set_xlabel('bill length (mm)')
+
+ggplot2_defaults()
+```
+
+#### Boxplots
+
+```{python}
+fig, ax = plt.subplots()
+
+ax.boxplot(penguins["bill_length_mm"].dropna(),
+    patch_artist = True,
+    medianprops = {"color": "black"},
+    boxprops = {"facecolor": "white"})
+ax.scatter(y = penguins["bill_length_mm"].dropna(), x = [1] * 342)
+plt.xticks([]);
+ggplot2_defaults()
+```
+
+
+#### Boxplot with points
+
+```{python}
+fig, ax = plt.subplots()
+n = len(penguins["bill_length_mm"].dropna())
+
+ax.boxplot(penguins["bill_length_mm"].dropna(),
+    patch_artist = True,
+    medianprops = {"color": "black"},
+    boxprops = {"fill": None})
+ax.scatter(y = penguins["bill_length_mm"].dropna(), x = [1] * n + np.random.normal(size = n, scale = 1/100), color = "black", alpha = 1/4)
+plt.xticks([]);
 ggplot2_defaults()
 ```
