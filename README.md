@@ -1,4 +1,6 @@
-# [A Guide to Visualizing Data with Matplotlib]([url](https://cddesja.github.io/matplotlib_guide/))
+# A Guide to Visualizing Data with Matplotlib
+
+The guidie is located at https://cddesja.github.io/matplotlib_guide/
 
 The list of visualizations include:
 
